@@ -1,26 +1,38 @@
 
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <queue>
 #include <algorithm>
+#include <random>
+#include <queue>
+#include <vector>
+
+//RNG Generator
+std::vector<int> generateJobs(int JOB_NUM) {
+    std::random_device random_device;
+    std::mt19937 generator(random_device());
+    std::uniform_int_distribution<int> distribution(1, 20);
+
+    std::vector<int> jobs;
+    jobs.reserve(JOB_NUM);
+
+    for (int i = 0; i < JOB_NUM; ++i) {
+        jobs.push_back(distribution(generator));
+    }
+
+    return jobs;
+}
 
 int main() {
-    std::vector<int> jobs;
-    std::ifstream file("test5.txt");
-    int val;
+    const int JOB_NUM = 5;
+    std::vector<int> jobs = generateJobs(JOB_NUM);
     std::queue<int> q;
     const int TIME_SLICE = 2;
 
-    if (!file.is_open()) {
-        std::cout << "Error opening file\n";
-        return 1;
+    std::cout << "Generated " << JOB_NUM << " jobs\n";
+    std::cout << "Job times: ";
+    for (int job : jobs) {
+        std::cout << job << " ";
     }
-
-    while (file >> val) {
-        jobs.push_back(val);
-    }
+    std::cout << "\n";
 
     std::vector<int> remaining = jobs;
     for (int i = 0; i < jobs.size(); i++) {
